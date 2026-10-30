@@ -223,7 +223,7 @@ for a, (m, name, _) in zip(ax.ravel(), [METRICS[i] for i in (0, 1, 2, 3, 4, 6)])
     a.set_xticks(range(len(cf))); a.set_xticklabels([LABEL[c] for c in cf], rotation=35, ha="right", fontsize=7)
     a.set_title(name)
 fig.suptitle(f"Performance across configurations (mean ± SD, {S} seeds, held-out days)")
-fig.tight_layout(); fig.savefig("figures/fig6_performance.png", dpi=600); plt.close(fig)
+fig.tight_layout(); fig.savefig("figures/Figure6.png", dpi=600); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(8, 3.9))
 w = 0.2
@@ -234,7 +234,7 @@ ax.axhline(0, color="k", lw=0.8)
 ax.set_xticks(range(len(base5))); ax.set_xticklabels([LABEL[b] for b in base5], rotation=20, ha="right")
 ax.set_ylabel("Proposed (neural) better by (%)")
 ax.legend(fontsize=7, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 1.01), frameon=False)
-fig.tight_layout(); fig.savefig("figures/fig7_relative.png", dpi=600); plt.close(fig)
+fig.tight_layout(); fig.savefig("figures/Figure7.png", dpi=600); plt.close(fig)
 
 fig, ax = plt.subplots(1, 3, figsize=(10, 3.2))
 for a, m in zip(ax, ["cpu", "ds", "delay"]):
@@ -245,7 +245,7 @@ for a, m in zip(ax, ["cpu", "ds", "delay"]):
           yerr=[col("proposed", m).std(ddof=1), col("nn_proposed", m).std(ddof=1)], capsize=3, color="#8172B3")
     a.set_xticks(x); a.set_xticklabels(["Tabular", "Neural"]); a.set_title(dict((q, n) for q, n, _ in METRICS)[m])
 ax[0].legend(fontsize=7)
-fig.tight_layout(); fig.savefig("figures/fig8_integration.png", dpi=600); plt.close(fig)
+fig.tight_layout(); fig.savefig("figures/Figure8.png", dpi=600); plt.close(fig)
 
 fig, ax = plt.subplots(1, 2, figsize=(9, 3.2))
 xb = np.arange(1, 11) * 80
@@ -258,9 +258,9 @@ ax[1].axhline(ref["ds"][0], ls="--", color="#CCB974")
 ax[0].set_title("Cost per 1000 units during training"); ax[1].set_title("Demand satisfaction during training")
 for a in ax: a.set_xlabel("Training day")
 ax[0].legend(fontsize=7)
-fig.tight_layout(); fig.savefig("figures/fig9_training.png", dpi=600); plt.close(fig)
+fig.tight_layout(); fig.savefig("figures/Figure9.png", dpi=600); plt.close(fig)
 
-# Figure 15 (measured ledger time) is drawn by rev_analyze.py from the Table 14 data (figures/rev_fig_ledger.png).
+# Figure 15 (measured ledger time) is drawn by rev_analyze.py from the Table 14 data (figures/Figure15.png).
 
 fig, ax = plt.subplots(1, 2, figsize=(9, 3.5))
 lv = [100 * float(l) for l in levels]
@@ -271,7 +271,7 @@ ax[0].set_title("Cost per 1000 units"); ax[1].set_title("Demand satisfaction")
 for a in ax: a.set_xlabel("IoT noise level (%)")
 h, l = ax[0].get_legend_handles_labels()
 fig.legend(h, l, fontsize=7, ncol=len(l), loc="upper center", bbox_to_anchor=(0.5, 1.0), frameon=False)
-fig.tight_layout(rect=(0, 0, 1, 0.92)); fig.savefig("figures/fig11_sensitivity.png", dpi=600); plt.close(fig)
+fig.tight_layout(rect=(0, 0, 1, 0.92)); fig.savefig("figures/Figure12.png", dpi=600); plt.close(fig)
 
 fig, ax = plt.subplots(1, 2, figsize=(9, 3.2))
 ax[0].plot(ns, [t9[n]["q"] for n in ns], "o-", label="Tabular Q-table entries", color="#8172B3")
@@ -284,5 +284,5 @@ ax[1].set_xscale("log", base=2); ax[1].set_xlabel("Customers"); ax[1].set_title(
 ax[1].legend(fontsize=7)
 for a in ax:
     a.set_xticks(ns); a.set_xticklabels([str(n) for n in ns]); a.minorticks_off()
-fig.tight_layout(); fig.savefig("figures/fig12_scaling.png", dpi=600); plt.close(fig)
+fig.tight_layout(); fig.savefig("figures/Figure13.png", dpi=600); plt.close(fig)
 print(open("results/tables.md").read())

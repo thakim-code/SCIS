@@ -1,5 +1,5 @@
 """Statistics, tables and figures for the first-round revision.
-    python rev_analyze.py            -> results/rev_summary.json, results/rev_tables.md, figures/rev_*.png
+    python rev_analyze.py            -> results/rev_summary.json, results/rev_tables.md, figures/Figure10-11, 14-15, S1
 """
 import glob, json, os, sys
 import numpy as np
@@ -129,7 +129,7 @@ if S:
         a.set_title("(" + "abc"[i] + ")", loc="left", fontsize=8)
     h, l = ax[0].get_legend_handles_labels()
     fig.legend(h, l, frameon=False, fontsize=6, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 0.0))
-    fig.tight_layout(rect=(0, 0.08, 1, 1)); fig.savefig("figures/rev_fig_diagnostics.png", dpi=600); plt.close(fig)
+    fig.tight_layout(rect=(0, 0.08, 1, 1)); fig.savefig("figures/Figure10.png", dpi=600); plt.close(fig)
 
 # ------------------------------------------------------------------ variants
 V = {}
@@ -201,7 +201,7 @@ if any(g == "coverage" for g, _ in V):
     ax[0].legend(frameon=False, fontsize=6)
     for i, a in enumerate(ax):
         a.set_title("(" + "ab"[i] + ")", loc="left", fontsize=8)
-    fig.tight_layout(); fig.savefig("figures/rev_fig_coverage.png", dpi=600); plt.close(fig)
+    fig.tight_layout(); fig.savefig("figures/Figure11.png", dpi=600); plt.close(fig)
 
 if any(g == "hparams" for g, _ in V):
     OUT["hparams"] = {}
@@ -249,7 +249,7 @@ if any(g == "frontier" for g, _ in V):
         a.set_title(f"({'abc'[i]}) {n} customers", loc="left", fontsize=8)
         if i == 0:
             a.set_ylabel("Cost per 1000 units"); a.legend(frameon=False, fontsize=6)
-    fig.tight_layout(); fig.savefig("figures/rev_fig_frontier.png", dpi=600); plt.close(fig)
+    fig.tight_layout(); fig.savefig("figures/Figure14.png", dpi=600); plt.close(fig)
 
 # ------------------------------------------------------------------ ledger
 if os.path.exists("results/rev_ledger.json"):
@@ -275,7 +275,7 @@ if os.path.exists("results/rev_ledger.json"):
     ax[1].set_xticks(Ns); ax[1].set_xticklabels(Ns)
     for i, a in enumerate(ax):
         a.set_title("(" + "ab"[i] + ")", loc="left", fontsize=8)
-    fig.tight_layout(); fig.savefig("figures/rev_fig_bft.png", dpi=600); plt.close(fig)
+    fig.tight_layout(); fig.savefig("figures/FigureS1.png", dpi=600); plt.close(fig)
 
 json.dump(OUT, open("results/rev_summary.json", "w"), indent=1)
 print(json.dumps({k: (v if k in ("vs_published", "alns_vs", "constraints") else "...") for k, v in OUT.items()}, indent=1)[:6000])
@@ -294,4 +294,4 @@ if S:
         ax.set_xticks(range(len(cb))); ax.set_xticklabels([LBL[c] for c in cb], rotation=20, ha="right")
         ax.set_ylabel("Measured time per daily decision (ms)")
         ax.legend(fontsize=7, ncol=2, loc="lower center", bbox_to_anchor=(0.5, 1.01), frameon=False)
-        fig.tight_layout(); fig.savefig("figures/rev_fig_ledger.png", dpi=600); plt.close(fig)
+        fig.tight_layout(); fig.savefig("figures/Figure15.png", dpi=600); plt.close(fig)

@@ -7,7 +7,7 @@ from matplotlib import font_manager as fm
 cond = [f.fname for f in fm.fontManager.ttflist if f.name == 'DejaVu Sans' and 'Condensed' in f.fname]
 FB = fm.FontProperties(fname=[c for c in cond if 'Bold' in c and 'Oblique' not in c][0])
 FR = fm.FontProperties(fname=[c for c in cond if 'Bold' not in c and 'Oblique' not in c][0])
-OUT = sys.argv[1] if len(sys.argv) > 1 else '/tmp/figure3_v3.png'
+OUT = sys.argv[1] if len(sys.argv) > 1 else 'figures/Figure3.png'
 
 W_IN, H_IN = 5.4, 3.2
 fig = plt.figure(figsize=(W_IN, H_IN)); ax = fig.add_axes([0, 0, 1, 1])

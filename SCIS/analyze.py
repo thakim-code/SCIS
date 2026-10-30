@@ -225,14 +225,15 @@ for a, (m, name, _) in zip(ax.ravel(), [METRICS[i] for i in (0, 1, 2, 3, 4, 6)])
 fig.suptitle(f"Performance across configurations (mean ± SD, {S} seeds, held-out days)")
 fig.tight_layout(); fig.savefig("figures/fig6_performance.png", dpi=600); plt.close(fig)
 
-fig, ax = plt.subplots(figsize=(8, 3.6))
+fig, ax = plt.subplots(figsize=(8, 3.9))
 w = 0.2
 for i, m in enumerate(m5):
     ax.bar(np.arange(len(base5)) + (i - 1.5) * w, [t5[b][m]["rel"] for b in base5], w,
            label=dict((a, b) for a, b, _ in METRICS)[m])
 ax.axhline(0, color="k", lw=0.8)
 ax.set_xticks(range(len(base5))); ax.set_xticklabels([LABEL[b] for b in base5], rotation=20, ha="right")
-ax.set_ylabel("Proposed (neural) better by (%)"); ax.legend(fontsize=7, ncol=2)
+ax.set_ylabel("Proposed (neural) better by (%)")
+ax.legend(fontsize=7, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 1.01), frameon=False)
 fig.tight_layout(); fig.savefig("figures/fig7_relative.png", dpi=600); plt.close(fig)
 
 fig, ax = plt.subplots(1, 3, figsize=(10, 3.2))
@@ -259,24 +260,18 @@ for a in ax: a.set_xlabel("Training day")
 ax[0].legend(fontsize=7)
 fig.tight_layout(); fig.savefig("figures/fig9_training.png", dpi=600); plt.close(fig)
 
-fig, ax = plt.subplots(figsize=(6.5, 3.2))
-cb = ["bc_only", "separate", "proposed", "nn_separate", "nn_proposed"]
-ax.bar(range(len(cb)), [t7[c]["val"] for c in cb], label="Validation (5 validators)", color="#4C72B0")
-ax.bar(range(len(cb)), [t7[c]["cons"] for c in cb], bottom=[t7[c]["val"] for c in cb],
-       label="Consensus + hashing", color="#55A868")
-ax.set_xticks(range(len(cb))); ax.set_xticklabels([LABEL[c] for c in cb], rotation=20, ha="right")
-ax.set_ylabel("Measured time per daily decision (ms)"); ax.legend(fontsize=7)
-fig.tight_layout(); fig.savefig("figures/fig10_blockchain.png", dpi=600); plt.close(fig)
+# Figure 15 (measured ledger time) is drawn by rev_analyze.py from the Table 14 data (figures/rev_fig_ledger.png).
 
-fig, ax = plt.subplots(1, 2, figsize=(9, 3.2))
+fig, ax = plt.subplots(1, 2, figsize=(9, 3.5))
 lv = [100 * float(l) for l in levels]
 for c in sens:
     ax[0].plot(lv, sens[c]["cpu"]["mean"], "o-", label=LABEL[c], color=C[c])
     ax[1].plot(lv, sens[c]["ds"]["mean"], "o-", label=LABEL[c], color=C[c])
 ax[0].set_title("Cost per 1000 units"); ax[1].set_title("Demand satisfaction")
 for a in ax: a.set_xlabel("IoT noise level (%)")
-ax[0].legend(fontsize=7)
-fig.tight_layout(); fig.savefig("figures/fig11_sensitivity.png", dpi=600); plt.close(fig)
+h, l = ax[0].get_legend_handles_labels()
+fig.legend(h, l, fontsize=7, ncol=len(l), loc="upper center", bbox_to_anchor=(0.5, 1.0), frameon=False)
+fig.tight_layout(rect=(0, 0, 1, 0.92)); fig.savefig("figures/fig11_sensitivity.png", dpi=600); plt.close(fig)
 
 fig, ax = plt.subplots(1, 2, figsize=(9, 3.2))
 ax[0].plot(ns, [t9[n]["q"] for n in ns], "o-", label="Tabular Q-table entries", color="#8172B3")

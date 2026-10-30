@@ -110,14 +110,13 @@ if S:
     OUT["diag"] = D
 
     # Figure: learning diagnostics
-    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.2))
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.6))
     for name, col, lab in (("tab_joint", C["tab"], "Tabular Q"), ("nn_joint", C["nn"], "Neural (DQN)")):
         e = np.array(D[name]["epochs"]); mu = np.array(D[name]["ckpt_mean"]); sd = np.array(D[name]["ckpt_sd"])
         ax[0].plot(e, mu, color=col, label=lab, lw=1.5); ax[0].fill_between(e, mu - sd, mu + sd, color=col, alpha=0.15, lw=0)
     for cfg, col, lab in (("ratio2opt", C["ratio"], "Demand-aware + 2-opt (test)"), ("alns", C["alns"], "ALNS (test)")):
         ax[0].axhline(OUT["main"][cfg]["cpu"][0], color=col, ls="--", lw=1, label=lab)
     ax[0].set_xlabel("Training day"); ax[0].set_ylabel("Cost per 1000 units\n(greedy, validation days)")
-    ax[0].legend(frameon=False, fontsize=6)
     td = np.array(D["nn_joint"]["td"]); x = np.linspace(0, 1, len(td) + 1)[1:] * D["nn_joint"]["n_updates"] / 1000
     ax[1].plot(x, td, color=C["nn"], lw=1.5); ax[1].set_xlabel("Gradient updates (thousands)"); ax[1].set_ylabel("Huber TD loss")
     a2 = ax[1].twinx(); a2.plot(x, D["nn_joint"]["q"], color=C["alns"], lw=1, ls=":"); a2.set_ylabel("Mean Q", color=C["alns"])
@@ -128,7 +127,9 @@ if S:
     ax[2].set_xlabel("Training day"); ax[2].set_ylabel("Exploration rate ε"); ax[2].legend(frameon=False, fontsize=6)
     for i, a in enumerate(ax):
         a.set_title("(" + "abc"[i] + ")", loc="left", fontsize=8)
-    fig.tight_layout(); fig.savefig("figures/rev_fig_diagnostics.png", dpi=600); plt.close(fig)
+    h, l = ax[0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=6, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 0.0))
+    fig.tight_layout(rect=(0, 0.08, 1, 1)); fig.savefig("figures/rev_fig_diagnostics.png", dpi=600); plt.close(fig)
 
 # ------------------------------------------------------------------ variants
 V = {}
@@ -278,3 +279,19 @@ if os.path.exists("results/rev_ledger.json"):
 
 json.dump(OUT, open("results/rev_summary.json", "w"), indent=1)
 print(json.dumps({k: (v if k in ("vs_published", "alns_vs", "constraints") else "...") for k, v in OUT.items()}, indent=1)[:6000])
+
+# ------------------------------------------------------------------ Figure 15: measured ledger time (Table 14 values)
+if S:
+    LBL = {"bc_only": "Blockchain-only", "separate": "Separate (tabular)", "proposed": "Integrated (tabular)",
+           "nn_separate": "Separate (neural)", "nn_proposed": "Proposed (neural)"}
+    cb = list(LBL)
+    with plt.rc_context({"font.family": "serif", "font.size": 9, "axes.grid": True, "grid.alpha": 0.3,
+                         "axes.spines.top": True, "axes.spines.right": True}):
+        fig, ax = plt.subplots(figsize=(6.5, 3.2))
+        val = [OUT["main"][c]["t_val"][0] for c in cb]; cons = [OUT["main"][c]["t_cons"][0] for c in cb]
+        ax.bar(range(len(cb)), val, label="Validation (5 validators)", color="#4C72B0")
+        ax.bar(range(len(cb)), cons, bottom=val, label="Consensus + hashing", color="#55A868")
+        ax.set_xticks(range(len(cb))); ax.set_xticklabels([LBL[c] for c in cb], rotation=20, ha="right")
+        ax.set_ylabel("Measured time per daily decision (ms)")
+        ax.legend(fontsize=7, ncol=2, loc="lower center", bbox_to_anchor=(0.5, 1.01), frameon=False)
+        fig.tight_layout(); fig.savefig("figures/rev_fig_ledger.png", dpi=600); plt.close(fig)

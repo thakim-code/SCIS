@@ -99,3 +99,15 @@ repository can be uploaded through the GitHub web interface. Unzip it in this fo
 `rev_analyze.py` or `rev_robust_analyze.py`:
 
     unzip results.zip
+
+## Production-proof changes (figures only; no result changed)
+Legends of Figures 7, 10, 12 and 15 were moved outside the plotting area so that they no longer hide data,
+and Figure 15 is now drawn from the same revision-round timings as Table 14. No number in any table changed.
+
+    Manuscript figure   File                              Script
+    Figure 7            figures/fig7_relative.png         analyze.py
+    Figure 10           figures/rev_fig_diagnostics.png   rev_analyze.py   (shaded band: mean ± SD over seeds)
+    Figure 12           figures/fig11_sensitivity.png     analyze.py
+    Figure 15           figures/rev_fig_ledger.png        rev_analyze.py   (values of Table 14)
+
+The earlier `figures/fig10_blockchain.png` (first-round ledger timings, superseded by Table 14) was removed.
